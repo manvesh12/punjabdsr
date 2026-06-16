@@ -18,8 +18,27 @@
   <link rel="stylesheet" href="css/premium-theme.css?v=3">
   <script defer src="https://cdn.jsdelivr.net/npm/lucide@0.363.0/dist/umd/lucide.min.js"></script>
   <link rel="stylesheet" href="css/mobile-overrides.css">
+  <style>
+    /* Hide Google Translate UI elements */
+    body { top: 0 !important; }
+    .skiptranslate { display: none !important; }
+    #goog-gt-tt { display: none !important; }
+    .goog-te-banner-frame { display: none !important; }
+    .goog-te-menu-value { margin: 0px; }
+    .goog-tooltip { display: none !important; }
+    .goog-tooltip:hover { display: none !important; }
+    .goog-text-highlight { background-color: transparent !important; box-shadow: none !important; }
+  </style>
 </head>
 <body class="sidebar-hidden premium-body">
+  <div id="google_translate_element" style="display:none;"></div>
+  <script>
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages: 'en,hi,pa', autoDisplay: false}, 'google_translate_element');
+    }
+  </script>
+  <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
 
   <!-- Interactive Live Grid Background -->
   <div class="interactive-grid-bg"></div>

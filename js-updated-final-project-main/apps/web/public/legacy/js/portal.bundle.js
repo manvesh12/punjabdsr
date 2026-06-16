@@ -14875,6 +14875,17 @@ window.applyPortalLanguage = function(lang, showToast = true) {
       el.setAttribute('aria-label', labels[key]);
     }
   });
+
+  // Trigger Google Translate
+  const combo = document.querySelector('.goog-te-combo');
+  if (combo) {
+    combo.value = nextLang;
+    combo.dispatchEvent(new Event('change'));
+  } else {
+    // Fallback if widget isn't fully loaded yet
+    document.cookie = `googtrans=/en/${nextLang}; path=/; domain=${window.location.hostname}`;
+  }
+
   refreshLanguageControls(nextLang);
   if (showToast && typeof dashPortalToast === 'function') {
     dashPortalToast(labels.languageApplied, 'success');
