@@ -2466,6 +2466,18 @@ html.dark .reviewer-notes-footer {
   }
 }
 
+/* Fix blurry search placeholder */
+.dash-menu-search input::placeholder {
+  color: rgba(255, 255, 255, 0.9) !important;
+  opacity: 1 !important;
+  font-weight: 500 !important;
+  -webkit-font-smoothing: antialiased !important;
+}
+html.dark .dash-menu-search input::placeholder {
+  color: #94a3b8 !important;
+}
+
+
 /* Premium Box for Notice Marquee Container */
 .dash-notice-marquee-container {
   background: #F2A123 !important;
