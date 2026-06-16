@@ -2198,7 +2198,7 @@ body.preview-open .pdf-preview-mobile-tabs { display: none; }
 /* ═══════════════════════════════════════════════════════════════
    TOAST NOTIFICATION
 ═══════════════════════════════════════════════════════════════ */
-.toast {
+#toast { display: none !important; } .toast {
   position: fixed; top: 28px; left: 50%; bottom: auto;
   transform: translateX(-50%) translateY(-100px);
   background: var(--navy); color: #fff;

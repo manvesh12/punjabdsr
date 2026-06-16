@@ -3637,13 +3637,13 @@ function renderChapters() {
         </div>
         <div style="display:flex; gap:6px;">
           <label class="btn btn-xs btn-outline" for="chapter-upload-${ch.id}" style="cursor:pointer; margin:0;">Replace</label>
-          <input id="chapter-upload-${ch.id}" class="chapter-upload-native" type="file" accept="application/pdf,.pdf" onchange="handleChapterUpload(event,${ch.id})">
+          <input id="chapter-upload-${ch.id}" class="chapter-upload-native" type="file" accept="application/pdf,.pdf" hidden onchange="handleChapterUpload(event,${ch.id})">
           <button type="button" class="btn btn-xs btn-danger" onclick="deleteChapterFile(${ch.id})">Remove</button>
         </div>
       </div>` : `
       <div style="margin-top:8px;display:flex;gap:8px;align-items:center">
         <label class="btn btn-xs btn-outline" for="chapter-upload-${ch.id}" style="cursor:pointer; margin:0;">Upload Chapter PDF</label>
-        <input id="chapter-upload-${ch.id}" class="chapter-upload-native" type="file" accept="application/pdf,.pdf" onchange="handleChapterUpload(event,${ch.id})">
+        <input id="chapter-upload-${ch.id}" class="chapter-upload-native" type="file" accept="application/pdf,.pdf" hidden onchange="handleChapterUpload(event,${ch.id})">
       </div>`;
     return `
       <div class="chapter-item">
@@ -14465,12 +14465,15 @@ async function fetchTargetProjects(district) {
 
   try {
     const data = await apiFetch('/projects');
-    const validStatuses = ['IN_PROGRESS', 'ACTIVE', 'DRAFT'];
     const projects = Array.isArray(data?.data) ? data.data : data;
     const filtered = (projects || []).filter((project) => {
-      const matchesDistrict = String(project.district || '').toLowerCase() === String(district || '').toLowerCase();
-      return matchesDistrict && validStatuses.includes(String(project.status || '').toUpperCase());
-    });
+        const projDistrict = String(project.district || '').trim().toLowerCase();
+        const targetDistrict = String(district || '').trim().toLowerCase();
+        const matchesDistrict = projDistrict === targetDistrict;
+        const projStatus = String(project.status || '').trim().toUpperCase().replace(/_/g, ' ');
+        const validStatuses = ['IN PROGRESS', 'ACTIVE', 'DRAFT'];
+        return matchesDistrict && validStatuses.includes(projStatus);
+      });
 
     if (!filtered.length) {
       listEl.innerHTML = `<div style="padding: 12px; color: var(--text-mid); background: #f8fafc; border-radius: 4px;">No ongoing projects found for ${escapeHtml(district)}. Please create a project first.</div>`;
@@ -14909,7 +14912,7 @@ function enforceReviewerReadOnly() {
     }
 }
 window.reviewerNotes = {};
-window.reviewerNotesMinimized = localStorage.getItem('reviewerNotesMinimized') !== '0';
+window.reviewerNotesMinimized = true;
 function applyReviewerNotesMinimizedState() {
     const box = document.getElementById('reviewer-floating-notes');
     const btn = document.getElementById('reviewer-notes-minimize-btn');
@@ -14922,6 +14925,21 @@ function applyReviewerNotesMinimizedState() {
             ? '<i data-lucide="maximize-2" style="width:14px; height:14px;"></i>'
             : '<i data-lucide="minus" style="width:14px; height:14px;"></i>';
     }
+    
+    // When minimized, fix position to bottom right and add click-to-expand
+    if (window.reviewerNotesMinimized) {
+        box.style.top = 'auto';
+        box.style.left = 'auto';
+        box.style.bottom = '24px';
+        box.style.right = '24px';
+        box.onclick = function(e) {
+            if (e.target.closest('button')) return;
+            toggleReviewerNotesMinimized();
+        };
+    } else {
+        box.onclick = null;
+    }
+    
     if (window.initLucide) initLucide();
 }
 function toggleReviewerNotesMinimized() {

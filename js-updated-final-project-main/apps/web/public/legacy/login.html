@@ -14,8 +14,8 @@
   <link
     href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=2">
-  <link rel="stylesheet" href="css/premium-theme.css?v=2">
+  <link rel="stylesheet" href="css/styles.css?v=3">
+  <link rel="stylesheet" href="css/premium-theme.css?v=3">
   <script defer src="https://cdn.jsdelivr.net/npm/lucide@0.363.0/dist/umd/lucide.min.js"></script>
 </head>
 <body class="sidebar-hidden premium-body">
@@ -342,16 +342,8 @@
             </div>
           </div>
         </div>
-        <div class="sb-section" id="tables-nav" style="display:none">
-          <div class="sb-section-lbl" style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 11px; font-weight: 800; color: var(--p-accent); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 10px; padding: 0 4px;">Data Tables</div>
-          <button class="sb-item" onclick="showView('demand-table',this)"><span class="sb-ico"><i data-lucide="bar-chart-3"></i></span>Demand Table</button>
-          <button class="sb-item" onclick="showView('auction-table',this)"><span class="sb-ico"><i data-lucide="landmark"></i></span>Auctioned Sites</button>
-          <button class="sb-item" onclick="showView('summary-table',this)"><span class="sb-ico"><i data-lucide="pie-chart"></i></span>Source Summary</button>
-          <button class="sb-item" onclick="showView('benchmark-table',this)"><span class="sb-ico"><i data-lucide="map-pin"></i></span>Bench Mark & CORS</button>
-        </div>
         <div class="sb-section" id="finalize-nav" style="display:none">
           <div class="sb-section-lbl" style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 11px; font-weight: 800; color: var(--p-accent); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 10px; padding: 0 4px;">Finalize</div>
-          <button class="sb-item" onclick="showView('esign',this)"><span class="sb-ico"><i data-lucide="pen-tool"></i></span>E-Signatures<span class="sb-badge sb-badge-red" id="sb-pending-sigs">5</span></button>
           <button class="btn sb-item" onclick="showView('generate',this)"><span class="sb-ico"><i data-lucide="download"></i></span>Generate PDF</button>
           <button class="sb-item" onclick="showView('history',this)"><span class="sb-ico"><i data-lucide="history"></i></span>Report History</button>
           <button class="sb-item" id="nav-users" onclick="showView('users',this)" style="display:none"><span class="sb-ico"><i data-lucide="users"></i></span>User Management</button>
@@ -2865,26 +2857,7 @@
               <div class="page-title">Annexure I - Sand Sources</div>
               <div class="page-sub">Details of Sand/M-Sand Sources · EMGSM 2020</div>
             </div>
-            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-              <span id="anx1-uploaded-filename"
-                style="font-size:12px; color:var(--text-soft); font-weight:600; display:none; padding:4px 8px; background:var(--off); border-radius:var(--r-xs); border:1px solid var(--border);"></span>
-              <button id="anx1-preview-btn" class="btn btn-outline btn-sm"
-                style="display:none; align-items:center; gap:6px;" onclick="togglePDFPreviewAnx1()"><i data-lucide="eye"
-                  style="width:14px; height:14px;"></i> Preview PDF</button>
-              <button id="anx1-download-btn" class="btn btn-pdf-download btn-sm" style="display:none;"
-                onclick="downloadPdfAnx1()"><i data-lucide="download" style="width:14px; height:14px;"></i> Download
-                PDF</button>
-              <button id="anx1-delete-btn" class="btn btn-danger btn-sm"
-                style="display:none; align-items:center; gap:6px;" onclick="deletePdfAnx1()"><i data-lucide="trash-2"
-                  style="width:14px; height:14px;"></i> Delete PDF</button>
-              <label class="btn btn-pdf-upload btn-sm"
-                style="cursor:pointer; margin-bottom:0; display:inline-flex; align-items:center; gap:6px;">
-                <i data-lucide="upload" style="width:14px; height:14px;"></i>
-                <span>Upload PDF</span>
-                <input type="file" accept="application/pdf" id="anx1-pdf-input" hidden
-                  onchange="handlePDFUpload(event)">
-              </label>
-            </div>
+
           </div>
           <div class="notif notif-info" style="margin-bottom:16px">
             Download the Excel template for each section below -> Fill values locally -> Upload at the bottom of the
@@ -3182,26 +3155,7 @@
               <div class="page-sub">Details of Mining Leases, Patta Lands, De-siltation & M-Sand Plants · EMGSM 2020
               </div>
             </div>
-            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-              <span id="anx2-uploaded-filename"
-                style="font-size:12px; color:var(--text-soft); font-weight:600; display:none; padding:4px 8px; background:var(--off); border-radius:var(--r-xs); border:1px solid var(--border);"></span>
-              <button id="anx2-preview-btn" class="btn btn-outline btn-sm"
-                style="display:none; align-items:center; gap:6px;" onclick="togglePDFPreviewAnx2()"><i data-lucide="eye"
-                  style="width:14px; height:14px;"></i> Preview PDF</button>
-              <button id="anx2-download-btn" class="btn btn-pdf-download btn-sm" style="display:none;"
-                onclick="downloadPdfAnx2()"><i data-lucide="download" style="width:14px; height:14px;"></i> Download
-                PDF</button>
-              <button id="anx2-delete-btn" class="btn btn-danger btn-sm"
-                style="display:none; align-items:center; gap:6px;" onclick="deletePdfAnx2()"><i data-lucide="trash-2"
-                  style="width:14px; height:14px;"></i> Delete PDF</button>
-              <label class="btn btn-pdf-upload btn-sm"
-                style="cursor:pointer; margin-bottom:0; display:inline-flex; align-items:center; gap:6px;">
-                <i data-lucide="upload" style="width:14px; height:14px;"></i>
-                <span>Upload PDF</span>
-                <input type="file" accept="application/pdf" id="anx2-pdf-input" hidden
-                  onchange="handlePDFUploadAnx2(event)">
-              </label>
-            </div>
+
           </div>
           <div class="notif notif-info" style="margin-bottom:16px">
             Download the Excel template for each section below -> Fill values locally -> Upload at the bottom of the
@@ -3605,26 +3559,7 @@
               <div class="page-title">Annexure III - Cluster Details</div>
               <div class="page-sub">Cluster &amp; Contiguous Cluster Details · EMGSM 2020</div>
             </div>
-            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-              <span id="anx3-uploaded-filename"
-                style="font-size:12px; color:var(--text-soft); font-weight:600; display:none; padding:4px 8px; background:var(--off); border-radius:var(--r-xs); border:1px solid var(--border);"></span>
-              <button id="anx3-preview-btn" class="btn btn-outline btn-sm"
-                style="display:none; align-items:center; gap:6px;" onclick="togglePDFPreviewAnx3()"><i data-lucide="eye"
-                  style="width:14px; height:14px;"></i> Preview PDF</button>
-              <button id="anx3-download-btn" class="btn btn-pdf-download btn-sm" style="display:none;"
-                onclick="downloadPdf()"><i data-lucide="download" style="width:14px; height:14px;"></i> Download
-                PDF</button>
-              <button id="anx3-delete-btn" class="btn btn-danger btn-sm"
-                style="display:none; align-items:center; gap:6px;" onclick="deletePdfAnx3()"><i data-lucide="trash-2"
-                  style="width:14px; height:14px;"></i> Delete PDF</button>
-              <label class="btn btn-pdf-upload btn-sm"
-                style="cursor:pointer; margin-bottom:0; display:inline-flex; align-items:center; gap:6px;">
-                <i data-lucide="upload" style="width:14px; height:14px;"></i>
-                <span>Upload PDF</span>
-                <input type="file" accept="application/pdf" id="anx3-pdf-input" hidden
-                  onchange="handlePdfUpload(event)">
-              </label>
-            </div>
+
           </div>
           <div class="notif notif-info" style="margin-bottom:16px">
             Download the Excel templates -> Fill values locally -> Upload below. You can also edit cell content inline.
@@ -3743,26 +3678,7 @@
               <div class="page-title">Annexure IV - Transportation Routes</div>
               <div class="page-sub">Transportation routes for individual leases and leases in clusters</div>
             </div>
-            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-              <span id="anx4-uploaded-filename"
-                style="font-size:12px; color:var(--text-soft); font-weight:600; display:none; padding:4px 8px; background:var(--off); border-radius:var(--r-xs); border:1px solid var(--border);"></span>
-              <button id="anx4-preview-btn" class="btn btn-outline btn-sm"
-                style="display:none; align-items:center; gap:6px;" onclick="togglePDFPreviewAnx4()"><i data-lucide="eye"
-                  style="width:14px; height:14px;"></i> Preview PDF</button>
-              <button id="anx4-download-btn" class="btn btn-pdf-download btn-sm" style="display:none;"
-                onclick="downloadPdfAnx4()"><i data-lucide="download" style="width:14px; height:14px;"></i> Download
-                PDF</button>
-              <button id="anx4-delete-btn" class="btn btn-danger btn-sm"
-                style="display:none; align-items:center; gap:6px;" onclick="deletePdfAnx4()"><i data-lucide="trash-2"
-                  style="width:14px; height:14px;"></i> Delete PDF</button>
-              <label class="btn btn-pdf-upload btn-sm"
-                style="cursor:pointer; margin-bottom:0; display:inline-flex; align-items:center; gap:6px;">
-                <i data-lucide="upload" style="width:14px; height:14px;"></i>
-                <span>Upload PDF</span>
-                <input type="file" accept="application/pdf" id="anx4-pdf-input" hidden
-                  onchange="handlePDFUploadAnx4(event)">
-              </label>
-            </div>
+
           </div>
           <div style="font-weight:bold; font-size:15px; color:var(--text-mid); margin-bottom:12px;">Individual Lease
             Routes:</div>
@@ -3801,24 +3717,7 @@
       <div class="page-title">Annexure V - Sand Mining Report</div>
       <div class="page-sub">Mining Leases, Patta Lands, De-Siltation &amp; M-Sand Plants · Jalandhar District</div>
     </div>
-    <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-      <span id="anx5-uploaded-filename"
-        style="font-size:12px; color:var(--text-soft); font-weight:600; display:none; padding:4px 8px; background:var(--off); border-radius:var(--r-xs); border:1px solid var(--border);"></span>
-      <button id="anx5-preview-btn" class="btn btn-outline btn-sm" style="display:none; align-items:center; gap:6px;"
-        onclick="togglePDFPreviewAnx5()"><i data-lucide="eye" style="width:14px; height:14px;"></i> Preview PDF</button>
-      <button id="anx5-download-btn" class="btn btn-pdf-download btn-sm" style="display:none;"
-        onclick="downloadPdfAnx5()"><i data-lucide="download" style="width:14px; height:14px;"></i> Download
-        PDF</button>
-      <button id="anx5-delete-btn" class="btn btn-danger btn-sm" style="display:none; align-items:center; gap:6px;"
-        onclick="deletePdfAnx5()"><i data-lucide="trash-2" style="width:14px; height:14px;"></i> Delete PDF</button>
-      <label for="anx5-pdf-input" class="btn btn-pdf-upload btn-sm"
-        style="cursor:pointer; margin-bottom:0; display:inline-flex; align-items:center; gap:6px;">
-        <i data-lucide="upload" style="width:14px; height:14px;"></i>
-        <span>Upload PDF</span>
-      </label>
-      <input type="file" accept="application/pdf" id="anx5-pdf-input"
-        style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;overflow:hidden" onchange="handlePDFUploadAnx5(event)">
-    </div>
+
   </div>
   <div class="notif notif-info" style="margin-bottom:16px">
     Download the Excel template for each section below -> Fill values locally -> Upload at the bottom of the section ->
@@ -4313,24 +4212,7 @@
       <div class="page-title">Annexure VI - Final Cluster Details</div>
       <div class="page-sub">Final Cluster &amp; Contiguous Cluster Details · EMGSM 2020</div>
     </div>
-    <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-      <span id="anx6-uploaded-filename"
-        style="font-size:12px; color:var(--text-soft); font-weight:600; display:none; padding:4px 8px; background:var(--off); border-radius:var(--r-xs); border:1px solid var(--border);"></span>
-      <button id="anx6-preview-btn" class="btn btn-outline btn-sm" style="display:none; align-items:center; gap:6px;"
-        onclick="togglePDFPreviewAnx6()"><i data-lucide="eye" style="width:14px; height:14px;"></i> Preview PDF</button>
-      <button id="anx6-download-btn" class="btn btn-pdf-download btn-sm" style="display:none;"
-        onclick="downloadPdfAnx6()"><i data-lucide="download" style="width:14px; height:14px;"></i> Download
-        PDF</button>
-      <button id="anx6-delete-btn" class="btn btn-danger btn-sm" style="display:none; align-items:center; gap:6px;"
-        onclick="deletePdfAnx6()"><i data-lucide="trash-2" style="width:14px; height:14px;"></i> Delete PDF</button>
-      <label for="anx6-pdf-input" class="btn btn-pdf-upload btn-sm"
-        style="cursor:pointer; margin-bottom:0; display:inline-flex; align-items:center; gap:6px;">
-        <i data-lucide="upload" style="width:14px; height:14px;"></i>
-        <span>Upload PDF</span>
-      </label>
-      <input type="file" accept="application/pdf" id="anx6-pdf-input"
-        style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;overflow:hidden" onchange="handlePDFUploadAnx6(event)">
-    </div>
+
   </div>
   <div class="notif notif-info" style="margin-bottom:16px">
     Download the Excel templates -> Fill values locally -> Upload below. Final Cluster Details come before Final
@@ -4457,23 +4339,7 @@
       <div class="page-title">Annexure VII - Transportation Routes</div>
       <div class="page-sub">Transportation routes for individual leases and leases in clusters</div>
     </div>
-    <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-      <span id="anx7-uploaded-filename"
-        style="font-size:12px; color:var(--text-soft); font-weight:600; display:none; padding:4px 8px; background:var(--off); border-radius:var(--r-xs); border:1px solid var(--border);"></span>
-      <button id="anx7-preview-btn" class="btn btn-outline btn-sm" style="display:none; align-items:center; gap:6px;"
-        onclick="togglePDFPreviewAnx7()"><i data-lucide="eye" style="width:14px; height:14px;"></i> Preview PDF</button>
-      <button id="anx7-download-btn" class="btn btn-pdf-download btn-sm" style="display:none;"
-        onclick="downloadPdfAnx7()"><i data-lucide="download" style="width:14px; height:14px;"></i> Download
-        PDF</button>
-      <button id="anx7-delete-btn" class="btn btn-danger btn-sm" style="display:none; align-items:center; gap:6px;"
-        onclick="deletePdfAnx7()"><i data-lucide="trash-2" style="width:14px; height:14px;"></i> Delete PDF</button>
-      <label class="btn btn-pdf-upload btn-sm"
-        style="cursor:pointer; margin-bottom:0; display:inline-flex; align-items:center; gap:6px;">
-        <i data-lucide="upload" style="width:14px; height:14px;"></i>
-        <span>Upload PDF</span>
-        <input type="file" accept="application/pdf" id="anx7-pdf-input" hidden onchange="handlePDFUploadAnx7(event)">
-      </label>
-    </div>
+
   </div>
   <div class="g2 annexure-line-layout" style="grid-template-columns: minmax(0, 2fr) minmax(220px, 0.75fr);">
     <div class="annexure-line-main">
@@ -6090,6 +5956,150 @@
   </div>
   <div class="toast" id="toast"></div>
 
-<script defer src="js/portal.bundle.js?v=2"></script>
+  <style>
+    /* STRICT REVIEWER BOX OVERRIDES */
+    #reviewer-floating-notes {
+      position: fixed !important;
+      right: 24px !important;
+      bottom: 24px !important;
+      z-index: 999999 !important;
+      width: 360px !important;
+      height: auto !important;
+      display: none; /* Managed by JS */
+      background: #fff !important;
+      border: 1px solid #ccc !important;
+      border-radius: 12px !important;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2) !important;
+      flex-direction: column !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      top: auto !important;
+      left: auto !important;
+      transform: none !important;
+    }
+    html.dark #reviewer-floating-notes {
+      background: #0d1a2b !important;
+      border-color: rgba(196,154,88,0.3) !important;
+    }
+    /* When minimized */
+    #reviewer-floating-notes.is-minimized {
+      width: 60px !important;
+      height: 60px !important;
+      border-radius: 50% !important;
+      cursor: pointer !important;
+      overflow: hidden !important;
+      background: linear-gradient(135deg, #17324D, #0f2439) !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3) !important;
+    }
+    #reviewer-floating-notes.is-minimized > * {
+      display: none !important;
+    }
+    #reviewer-floating-notes.is-minimized::before {
+      content: "";
+      display: block !important;
+      width: 24px;
+      height: 24px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7'%3E%3C/path%3E%3Cpath d='M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z'%3E%3C/path%3E%3C/svg%3E");
+      background-size: cover;
+    }
+    #reviewer-floating-notes.is-minimized::after {
+      content: "";
+      position: absolute;
+      right: 2px;
+      top: 2px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #22c55e;
+      border: 2px solid #fff;
+    }
+  </style>
+  <script>
+    setInterval(() => {
+      const box = document.getElementById('reviewer-floating-notes');
+      if (!box) return;
+      
+      // Setup dragging
+      if (!box.dataset.dragBound) {
+         box.dataset.dragBound = "true";
+         
+         let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+         let isDragging = false;
+         
+         const header = box.querySelector('.reviewer-notes-header');
+         if (header) {
+             header.onmousedown = dragMouseDown;
+         }
+         
+         box.onmousedown = function(e) {
+             // Allow dragging the minimized circle
+             if (box.classList.contains('is-minimized')) {
+                 dragMouseDown(e);
+             }
+         };
+         
+         function dragMouseDown(e) {
+             if (e.target.closest('button')) return; // Ignore button clicks
+             isDragging = false;
+             e = e || window.event;
+             e.preventDefault();
+             pos3 = e.clientX;
+             pos4 = e.clientY;
+             document.onmouseup = closeDragElement;
+             document.onmousemove = elementDrag;
+         }
+         
+         function elementDrag(e) {
+             e = e || window.event;
+             e.preventDefault();
+             
+             let moveX = Math.abs(pos3 - e.clientX);
+             let moveY = Math.abs(pos4 - e.clientY);
+             if (moveX > 3 || moveY > 3) isDragging = true;
+             
+             pos1 = pos3 - e.clientX;
+             pos2 = pos4 - e.clientY;
+             pos3 = e.clientX;
+             pos4 = e.clientY;
+             
+             box.style.setProperty('top', (box.offsetTop - pos2) + 'px', 'important');
+             box.style.setProperty('left', (box.offsetLeft - pos1) + 'px', 'important');
+             box.style.setProperty('bottom', 'auto', 'important');
+             box.style.setProperty('right', 'auto', 'important');
+         }
+         
+         function closeDragElement() {
+             document.onmouseup = null;
+             document.onmousemove = null;
+             
+             // Expand if clicked (not dragged) while minimized
+             if (!isDragging && box.classList.contains('is-minimized')) {
+                 if (typeof toggleReviewerNotesMinimized === 'function') {
+                     toggleReviewerNotesMinimized();
+                 }
+             }
+         }
+      }
+      
+      // Auto-reset position when minimized
+      if (!box.dataset.lastState) {
+          box.dataset.lastState = box.classList.contains('is-minimized') ? 'min' : 'exp';
+      } else {
+          const currentState = box.classList.contains('is-minimized') ? 'min' : 'exp';
+          if (box.dataset.lastState === 'exp' && currentState === 'min') {
+              // Just minimized! Snap back to bottom right
+              box.style.setProperty('top', 'auto', 'important');
+              box.style.setProperty('left', 'auto', 'important');
+              box.style.setProperty('bottom', '24px', 'important');
+              box.style.setProperty('right', '24px', 'important');
+          }
+          box.dataset.lastState = currentState;
+      }
+    }, 500);
+  </script>
+  <script defer src="js/portal.bundle.js?v=4"></script>
 </body>
 </html>

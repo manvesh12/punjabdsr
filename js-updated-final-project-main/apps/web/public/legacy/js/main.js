@@ -172,7 +172,7 @@ function enforceReviewerReadOnly() {
     }
 }
 window.reviewerNotes = {};
-window.reviewerNotesMinimized = localStorage.getItem('reviewerNotesMinimized') !== '0';
+window.reviewerNotesMinimized = true;
 function applyReviewerNotesMinimizedState() {
     const box = document.getElementById('reviewer-floating-notes');
     const btn = document.getElementById('reviewer-notes-minimize-btn');
@@ -185,6 +185,21 @@ function applyReviewerNotesMinimizedState() {
             ? '<i data-lucide="maximize-2" style="width:14px; height:14px;"></i>'
             : '<i data-lucide="minus" style="width:14px; height:14px;"></i>';
     }
+    
+    // When minimized, fix position to bottom right and add click-to-expand
+    if (window.reviewerNotesMinimized) {
+        box.style.top = 'auto';
+        box.style.left = 'auto';
+        box.style.bottom = '24px';
+        box.style.right = '24px';
+        box.onclick = function(e) {
+            if (e.target.closest('button')) return;
+            toggleReviewerNotesMinimized();
+        };
+    } else {
+        box.onclick = null;
+    }
+    
     if (window.initLucide) initLucide();
 }
 function toggleReviewerNotesMinimized() {
