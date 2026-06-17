@@ -15,8 +15,8 @@ function getHtmlFiles(dir) {
   return files;
 }
 
-const targetRegex = /style="width:54px; height:54px; flex-shrink:0; border-radius:50%; object-fit: cover;"/g;
-const replacement = `style="width:72px; height:72px; flex-shrink:0; border-radius:50%; object-fit: cover;"`;
+const targetRegex = /width:54px; height:54px;/g;
+const replacement = `width:72px; height:72px;`;
 
 const baseDir = 'apps/web/public/legacy';
 const htmlFiles = getHtmlFiles(baseDir);
