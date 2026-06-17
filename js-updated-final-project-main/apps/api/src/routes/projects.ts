@@ -279,11 +279,15 @@ projectsRouter.get("/:id", async (req, res) => {
 projectsRouter.put("/:id/state", async (req, res) => {
   const id = parseBigIntParam(req.params.id, res, "project id");
   if (!id) return;
+  const dataToUpdate: any = {
+    projectState: req.body?.state == null ? null : typeof req.body.state === "string" ? req.body.state : JSON.stringify(req.body.state)
+  };
+  if (typeof req.body?.progress === "number") {
+    dataToUpdate.progress = req.body.progress;
+  }
   const project = await prisma.project.update({
     where: { id },
-    data: {
-      projectState: req.body?.state == null ? null : typeof req.body.state === "string" ? req.body.state : JSON.stringify(req.body.state)
-    },
+    data: dataToUpdate,
     include: { files: true }
   });
   res.json(jsonSafe({ success: true, project: toProjectDto(project) }));

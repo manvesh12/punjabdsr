@@ -3035,6 +3035,7 @@ async function openProject(id) {
         locked: Boolean(stateSnapshot.phaseMetadata?.locked || projData.phaseLocked)
       };
       S.phaseChangeLog = Array.isArray(stateSnapshot.phaseChangeLog) ? stateSnapshot.phaseChangeLog : [];
+      updateLiveProgressUI(S.activeProject.progress || 0);
       if (stateSnapshot.frontMatter) S.frontMatter = stateSnapshot.frontMatter;
       if (stateSnapshot.chapters) S.chapters = stateSnapshot.chapters;
       if (stateSnapshot.plates) S.plates = stateSnapshot.plates;
@@ -3209,9 +3210,17 @@ async function persistProjectState() {
     phaseChangeLog: S.phaseChangeLog || []
   };
   try {
+    const newProgress = calculateProjectProgress(stateSnapshot);
+    S.activeProject.progress = newProgress;
+    updateLiveProgressUI(newProgress);
+    if (typeof renderWorkflowProjectLiveCard === 'function') renderWorkflowProjectLiveCard();
+
     await apiFetch(`/projects/${S.activeProject.id}/state`, {
       method: 'PUT',
-      body: JSON.stringify({ state: JSON.stringify(stateSnapshot) })
+      body: JSON.stringify({ 
+        state: JSON.stringify(stateSnapshot),
+        progress: newProgress
+      })
     });
   } catch (err) {
     console.error('Failed to persist project state:', err);
@@ -4359,7 +4368,7 @@ function buildPdfChartHelper(g, o, type, canvasEl) {
   const preY = [...(g.hasSubGraph ? o.subElev : []), o.subRed, o.subThal].filter(v => !isNaN(v));
   const { min: preYMin, max: preYMax } = getYBounds(preY);
   const yMin = isPre ? preYMin : postYMin;
-  const yMax = isPre ? postYMax : postYMax;
+  const yMax = isPre ? preYMax : postYMax;
   const redArr = isPre ? dists.map(() => o.subRed) : dists.map(() => o.red);
   const thalArr = isPre ? dists.map(() => o.subThal) : dists.map(() => o.thal);
   const pdfPointLabelsPlugin = {
@@ -15269,3 +15278,56 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 ;
+function calculateProjectProgress(state) {
+  let progress = 0;
+  if (state.frontMatter && Object.keys(state.frontMatter).length > 2) progress += 10;
+  if (state.chapters) {
+    const filledChapters = Object.values(state.chapters).filter(c => c && typeof c === 'string' && c.trim() && c.length > 20).length;
+    progress += Math.min(30, filledChapters * 3);
+  }
+  if (state.plates && state.plates.length > 0) progress += 5;
+  if (state.graphs && state.graphs.length > 0) progress += 5;
+  if (state.uploadedPDFs) {
+    const types = new Set(state.uploadedPDFs.map(f => f.type));
+    progress += Math.min(30, types.size * 5);
+  }
+  const hasAdditional = state.annexureB || state.annexureC || state.annexureD || state.annexureE;
+  if (hasAdditional && Object.keys(hasAdditional).length > 0) progress += 10;
+  if (state.signatures && state.signatures.length > 0) progress += 10;
+  return Math.min(100, Math.floor(progress));
+}
+
+function updateLiveProgressUI(progress) {
+  let bar = document.getElementById('global-live-progress');
+  if (!bar) {
+    const header = document.querySelector('header');
+    if (!header) return;
+    bar = document.createElement('div');
+    bar.id = 'global-live-progress';
+    bar.style.position = 'absolute';
+    bar.style.bottom = '0';
+    bar.style.left = '0';
+    bar.style.height = '4px';
+    bar.style.background = 'linear-gradient(90deg, var(--teal), var(--green))';
+    bar.style.transition = 'width 0.4s ease-out';
+    bar.style.width = '0%';
+    bar.style.zIndex = '101';
+    
+    const pct = document.createElement('div');
+    pct.id = 'global-live-progress-pct';
+    pct.style.position = 'absolute';
+    pct.style.right = '20px';
+    pct.style.bottom = '-20px';
+    pct.style.fontSize = '12px';
+    pct.style.fontWeight = 'bold';
+    pct.style.color = 'var(--text-soft)';
+    
+    header.appendChild(bar);
+    header.appendChild(pct);
+  }
+  document.getElementById('global-live-progress').style.width = progress + '%';
+  const pctEl = document.getElementById('global-live-progress-pct');
+  if (pctEl) {
+    pctEl.textContent = typeof S !== 'undefined' && S.activeProject ? 'Project Progress: ' + progress + '%' : '';
+  }
+}
