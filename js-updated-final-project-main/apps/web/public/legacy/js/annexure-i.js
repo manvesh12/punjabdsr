@@ -1,1 +1,0 @@
-registerSimpleAnnexure('I');
