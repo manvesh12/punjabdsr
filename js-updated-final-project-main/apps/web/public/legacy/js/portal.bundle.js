@@ -15280,7 +15280,15 @@ document.addEventListener('DOMContentLoaded', () => {
 ;
 function calculateProjectProgress(state) {
   let progress = 0;
-  if (state.frontMatter && Object.keys(state.frontMatter).length > 2) progress += 10;
+  if (state.frontMatter) {
+    let fmScore = 0;
+    if (state.frontMatter.title && state.frontMatter.title !== 'District Survey Report for Sand Mining') fmScore += 2;
+    if (state.frontMatter.district && state.frontMatter.district !== 'Jalandhar') fmScore += 2;
+    if (state.frontMatter.state && state.frontMatter.state !== 'Punjab') fmScore += 2;
+    if (state.frontMatter.preface && state.frontMatter.preface.trim().length > 5) fmScore += 2;
+    if (state.frontMatter.acknowledgement && state.frontMatter.acknowledgement.trim().length > 5) fmScore += 2;
+    progress += fmScore;
+  }
   if (state.chapters) {
     const filledChapters = Object.values(state.chapters).filter(c => c && typeof c === 'string' && c.trim() && c.length > 20).length;
     progress += Math.min(30, filledChapters * 3);
@@ -15288,8 +15296,8 @@ function calculateProjectProgress(state) {
   if (state.plates && state.plates.length > 0) progress += 5;
   if (state.graphs && state.graphs.length > 0) progress += 5;
   if (state.uploadedPDFs) {
-    const types = new Set(state.uploadedPDFs.map(f => f.type));
-    progress += Math.min(30, types.size * 5);
+    const types = Object.keys(state.uploadedPDFs);
+    progress += Math.min(30, types.length * 5);
   }
   const hasAdditional = state.annexureB || state.annexureC || state.annexureD || state.annexureE;
   if (hasAdditional && Object.keys(hasAdditional).length > 0) progress += 10;
