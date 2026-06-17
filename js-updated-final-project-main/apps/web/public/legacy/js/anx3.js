@@ -579,7 +579,7 @@ function exportAnx3PDF(btn, isLivePreview = false) {
         const row = [];
         const tds = tr.querySelectorAll('td');
         for (let i = 0; i < tds.length - 1; i++) {
-          row.push(getCellText(tds[i]));
+          row.push(getCellTextLocal(tds[i]));
         }
         rows.push(row);
       });
