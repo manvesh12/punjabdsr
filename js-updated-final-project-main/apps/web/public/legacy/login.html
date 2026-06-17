@@ -29,6 +29,9 @@
     .goog-tooltip:hover { display: none !important; }
     .goog-text-highlight { background-color: transparent !important; box-shadow: none !important; }
   </style>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1e293b">
+  <link rel="apple-touch-icon" href="assets/smart-dsr-logo.png">
 </head>
 <body class="sidebar-hidden premium-body">
   <div id="google_translate_element" style="display:none;"></div>
@@ -6120,5 +6123,20 @@ window.addGenericTableBlock = function(btn) {
 };
 </script>
 
+
+  <!-- PWA Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then(registration => {
+            console.log('ServiceWorker registration successful with scope: ', registration.scope);
+          })
+          .catch(err => {
+            console.log('ServiceWorker registration failed: ', err);
+          });
+      });
+    }
+  </script>
 </body>
 </html>
