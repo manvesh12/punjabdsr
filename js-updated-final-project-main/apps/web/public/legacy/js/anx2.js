@@ -349,16 +349,19 @@ function exportAnx2PDF(btn, isLivePreview = false) {
     doc.text("Page " + data.pageNumber, pageWidth / 2, pageHeight - 20, { align: "center" });
   };
   const extractData = (tableId) => {
-    const tbl = document.getElementById(tableId);
-    const headers = Array.from(tbl.querySelectorAll('thead th')).slice(0, -1).map(th => th.innerText.trim().replace(/\n/g, ' '));
+    const tables = document.querySelectorAll(`table[id^="${tableId}"]`);
+    if (tables.length === 0) return { headers: [], rows: [] };
+    const headers = Array.from(tables[0].querySelectorAll('thead th')).slice(0, -1).map(th => th.innerText.trim().replace(/\n/g, ' '));
     const rows = [];
-    tbl.querySelectorAll('tbody tr').forEach(tr => {
-      const row = [];
-      const tds = tr.querySelectorAll('td');
-      for (let i = 0; i < tds.length - 1; i++) {
-        row.push(getCellText(tds[i]));
-      }
-      rows.push(row);
+    tables.forEach(tbl => {
+      tbl.querySelectorAll('tbody tr').forEach(tr => {
+        const row = [];
+        const tds = tr.querySelectorAll('td');
+        for (let i = 0; i < tds.length - 1; i++) {
+          row.push(getCellText(tds[i]));
+        }
+        rows.push(row);
+      });
     });
     return { headers, rows };
   };

@@ -202,12 +202,8 @@ function generateFinalPDF() {
   ];
   allTablesData.forEach((tblConfig, index) => {
     let tables = [];
-    if (tblConfig.id === '#anx2-leases') {
-      tables = Array.from(document.querySelectorAll('table[id^="anx2-leases"]'));
-    } else {
-      const el = document.querySelector(tblConfig.id);
-      if (el) tables.push(el);
-    }
+    const baseId = tblConfig.id.replace('#', '');
+    tables = Array.from(document.querySelectorAll(`table[id^="${baseId}"]`));
     tables.forEach((tableEl, tblIdx) => {
       if (tableEl && tableEl.rows.length > 1) { // ensure it has rows beyond header
         doc.addPage(); addPageHeader(tblConfig.title.split(' - ')[0]); y=25;

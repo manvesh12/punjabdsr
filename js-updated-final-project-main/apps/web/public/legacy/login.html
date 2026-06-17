@@ -6051,7 +6051,7 @@ document.addEventListener('DOMContentLoaded', () => {
          const menuId = viewId.replace('view-', 'menu-');
          const menuEl = document.querySelector('#' + menuId + ' .menu-label');
          if (menuEl) menuEl.innerText = this.innerText.trim();
-         if(window.debouncedSaveState) debouncedSaveState();
+         if(window.debouncedSaveState) debouncedSaveState(); let viewIdToUpdate = viewId || ""; if (!viewIdToUpdate) { const parentMenu = this.closest(".menu-item"); if (parentMenu) viewIdToUpdate = parentMenu.id.replace("menu-", "view-"); } if (viewIdToUpdate) { const expName = "export" + viewIdToUpdate.replace("view-","").toUpperCase() + "PDF"; if (typeof window[expName] === "function") window[expName](null, true); else if (typeof window["export" + viewIdToUpdate.replace("view-","").charAt(0).toUpperCase() + viewIdToUpdate.replace("view-","").slice(1) + "PDF"] === "function") window["export" + viewIdToUpdate.replace("view-","").charAt(0).toUpperCase() + viewIdToUpdate.replace("view-","").slice(1) + "PDF"](null, true); }
       }
     });
   });
@@ -6070,7 +6070,7 @@ document.addEventListener('DOMContentLoaded', () => {
          S.frontMatter.customTitles[viewId] = this.innerText.trim();
          const pageTitle = document.querySelector('#' + viewId + ' .page-title');
          if (pageTitle) pageTitle.innerText = this.innerText.trim();
-         if(window.debouncedSaveState) debouncedSaveState();
+         if(window.debouncedSaveState) debouncedSaveState(); let viewIdToUpdate = viewId || ""; if (!viewIdToUpdate) { const parentMenu = this.closest(".menu-item"); if (parentMenu) viewIdToUpdate = parentMenu.id.replace("menu-", "view-"); } if (viewIdToUpdate) { const expName = "export" + viewIdToUpdate.replace("view-","").toUpperCase() + "PDF"; if (typeof window[expName] === "function") window[expName](null, true); else if (typeof window["export" + viewIdToUpdate.replace("view-","").charAt(0).toUpperCase() + viewIdToUpdate.replace("view-","").slice(1) + "PDF"] === "function") window["export" + viewIdToUpdate.replace("view-","").charAt(0).toUpperCase() + viewIdToUpdate.replace("view-","").slice(1) + "PDF"](null, true); }
       }
     });
   });
@@ -6094,5 +6094,86 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 </script>
+
+<script>
+// --- GENERIC TABLE CLONE LOGIC ---
+window.addGenericTableBlock = function(btn) {
+  const section = btn.closest('.anx-section');
+  if (!section) return;
+  const clone = section.cloneNode(true);
+  
+  const timestamp = Date.now();
+  const tables = clone.querySelectorAll('table');
+  tables.forEach(t => {
+    const baseId = t.id.split('-clone-')[0];
+    t.id = baseId + '-clone-' + timestamp;
+    const tbody = t.querySelector('tbody');
+    if (tbody) tbody.innerHTML = '';
+  });
+
+  let removeBtn = clone.querySelector('.rm-generic-btn');
+  if (!removeBtn) {
+    const footer = clone.querySelector('.section-footer');
+    if (footer) {
+      removeBtn = document.createElement('button');
+      removeBtn.className = 'btn btn-xs btn-danger rm-generic-btn';
+      removeBtn.style.display = 'inline-flex';
+      removeBtn.style.alignItems = 'center';
+      removeBtn.style.gap = '6px';
+      removeBtn.innerHTML = '<i data-lucide="trash-2" style="width:12px; height:12px;"></i><span>Remove Table</span>';
+      removeBtn.onclick = function() { 
+        this.closest('.anx-section').remove(); 
+        // Trigger live preview
+        const viewId = this.closest('.view')?.id;
+        if (viewId && typeof window['export' + viewId.replace('view-','').charAt(0).toUpperCase() + viewId.replace('view-','').slice(1) + 'PDF'] === 'function') {
+           window['export' + viewId.replace('view-','').charAt(0).toUpperCase() + viewId.replace('view-','').slice(1) + 'PDF'](null, true);
+        }
+      };
+      footer.appendChild(removeBtn);
+    }
+  } else {
+    removeBtn.style.display = 'inline-flex';
+  }
+
+  const titleEl = clone.querySelector('.anx-section-title');
+  if (titleEl && !titleEl.innerText.includes('(Continued)')) {
+    titleEl.innerText = titleEl.innerText + ' (Continued)';
+  }
+
+  section.parentNode.insertBefore(clone, section.nextSibling);
+  if (window.initLucide) window.initLucide();
+  
+  // Try to add 1 empty row based on the first table's first row
+  tables.forEach((t, i) => {
+     const origTable = section.querySelectorAll('table')[i];
+     if (origTable && origTable.querySelector('tbody tr')) {
+         const emptyRow = origTable.querySelector('tbody tr').cloneNode(true);
+         emptyRow.querySelectorAll('td').forEach(td => {
+            if (!td.querySelector('button') && !td.querySelector('select')) {
+               td.innerText = '';
+               if (td.contentEditable === 'false' && !td.classList.contains('calc-total') && !td.classList.contains('calc-net')) {
+                   td.contentEditable = 'true';
+               }
+            }
+            // re-bind events
+            if (td.classList.contains('calc-total') || td.classList.contains('calc-net')) {
+                td.innerText = '0.00';
+            }
+         });
+         const tbody = t.querySelector('tbody');
+         if(tbody) tbody.appendChild(emptyRow);
+     }
+  });
+  
+  // Trigger live preview
+  const viewId = section.closest('.view')?.id;
+  if (viewId) {
+    const exportFnName = 'export' + viewId.replace('view-','').toUpperCase() + 'PDF';
+    if (typeof window[exportFnName] === 'function') window[exportFnName](null, true);
+    // Handle camelCase variations if needed
+  }
+};
+</script>
+
 </body>
 </html>

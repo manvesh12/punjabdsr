@@ -570,37 +570,20 @@ function exportAnx3PDF(btn, isLivePreview = false) {
     return td.innerText.trim();
   };
   const extractData = (tableId) => {
-    const tbl = document.getElementById(tableId);
-    if (!tbl) return { headers: [], rows: [] };
-    const headers = Array.from(tbl.querySelectorAll('thead th')).slice(0, -1).map(th => th.innerText.trim().replace(/\n/g, ' '));
+    const tables = document.querySelectorAll(`table[id^="${tableId}"]`);
+    if (tables.length === 0) return { headers: [], rows: [] };
+    const headers = Array.from(tables[0].querySelectorAll('thead th')).slice(0, -1).map(th => th.innerText.trim().replace(/\n/g, ' '));
     const rows = [];
-    tbl.querySelectorAll('tbody tr').forEach(tr => {
-      const row = [];
-      const tds = tr.querySelectorAll('td');
-      for (let i = 0; i < tds.length - 1; i++) {
-        row.push(getCellTextLocal(tds[i]));
-      }
-      rows.push(row);
-    });
-    const tfoot = tbl.querySelector('tfoot');
-    if (tfoot) {
-      tfoot.querySelectorAll('tr').forEach(tr => {
+    tables.forEach(tbl => {
+      tbl.querySelectorAll('tbody tr').forEach(tr => {
         const row = [];
         const tds = tr.querySelectorAll('td');
-        for (let i = 0; i < tds.length; i++) {
-          const colSpan = parseInt(tds[i].getAttribute('colspan') || '1');
-          row.push(tds[i].innerText.trim());
-          for (let c = 1; c < colSpan; c++) {
-            row.push('');
-          }
+        for (let i = 0; i < tds.length - 1; i++) {
+          row.push(getCellText(tds[i]));
         }
-        if (row.length > headers.length) {
-          rows.push(row.slice(0, headers.length));
-        } else {
-          rows.push(row);
-        }
+        rows.push(row);
       });
-    }
+    });
     return { headers, rows };
   };
   doc.setFont("times", "bold");

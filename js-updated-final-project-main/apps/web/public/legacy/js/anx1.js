@@ -151,12 +151,18 @@ function escapeAnx1Html(value) {
     .replace(/'/g, '&#39;');
 }
 function getAnx1TableRows(tableId) {
-  return Array.from(document.querySelectorAll(`#${tableId} tbody tr`)).map(row => (
-    Array.from(row.querySelectorAll('td')).slice(0, -1).map(cell => {
-      const select = cell.querySelector('select');
-      return select ? select.value : cell.innerText.trim();
-    })
-  ));
+  const tables = document.querySelectorAll(`table[id^="${tableId}"]`);
+  let allRows = [];
+  tables.forEach(tbl => {
+    const rows = Array.from(tbl.querySelectorAll('tbody tr')).map(row => (
+      Array.from(row.querySelectorAll('td')).slice(0, -1).map(cell => {
+        const select = cell.querySelector('select');
+        return select ? select.value : cell.innerText.trim();
+      })
+    ));
+    allRows = allRows.concat(rows);
+  });
+  return allRows;
 }
 function buildAnx1PreviewMarkup() {
   const sections = [
