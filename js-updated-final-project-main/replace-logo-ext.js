@@ -15,8 +15,8 @@ function getHtmlFiles(dir) {
   return files;
 }
 
-const targetRegex = /<img src="assets\/smart-dsr-logo\.png"[^>]*>/g;
-const replacement = `<img src="assets/smart-dsr-logo.svg" alt="Smart DSR Punjab Logo" style="width:54px; height:54px; flex-shrink:0; border-radius:50%; object-fit: cover; background: #fff;">`;
+const targetRegex = /<img src="assets\/smart-dsr-logo\.svg"/g;
+const replacement = `<img src="assets/smart-dsr-logo.png"`;
 
 const baseDir = 'apps/web/public/legacy';
 const htmlFiles = getHtmlFiles(baseDir);
