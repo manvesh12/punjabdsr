@@ -290,20 +290,20 @@ function exportAnx1PDF(btn, isLivePreview = false) {
 }
 function executePDFExport(isLivePreview) {
   const mainView = document.getElementById('view-anx1');
-  const printElement = document.createElement('div');
-  printElement.id = 'pdf-render-container';
-  printElement.style.width = '100%';
-  printElement.style.maxWidth = '1000px'; 
-  printElement.style.margin = '0 auto';
-  printElement.style.fontFamily = 'Arial, Helvetica, sans-serif';
-  printElement.style.color = '#000000';
-  printElement.style.backgroundColor = '#ffffff';
-  printElement.innerHTML = buildAnx1PreviewMarkup();
-  printElement.style.position = 'absolute';
-  printElement.style.top = '0';
-  printElement.style.left = '0';
-  printElement.style.zIndex = '-9999';
-  document.body.appendChild(printElement);
+  const htmlString = buildAnx1PreviewMarkup();
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   
   
@@ -319,7 +319,7 @@ function executePDFExport(isLivePreview) {
     pagebreak:    { mode: ['css', 'legacy'], avoid: ['tr', 'h4'] }
   };
   if (isLivePreview) {
-    html2pdf().set(opt).from(printElement).toPdf().get('pdf').then(function(pdf) {
+    html2pdf().set(opt).from(htmlString).toPdf().get('pdf').then(function(pdf) {
       const totalPages = pdf.internal.getNumberOfPages();
       for (let i = 1; i <= totalPages; i++) {
         pdf.setPage(i);
@@ -330,7 +330,7 @@ function executePDFExport(isLivePreview) {
       const blob = pdf.output('blob');
       const blobUrl = URL.createObjectURL(blob);
       
-      if(document.body.contains(printElement)) document.body.removeChild(printElement);
+      
       const iframe = window.setAnnexurePreviewIframeSrc
         ? window.setAnnexurePreviewIframeSrc('anx1', blobUrl)
         : (window.getAnnexurePreviewIframe ? window.getAnnexurePreviewIframe('anx1') : document.getElementById('pdf-preview-iframe'));
@@ -344,7 +344,7 @@ function executePDFExport(isLivePreview) {
     let originalBodyBg = document.body.style.backgroundColor;
     document.body.style.padding = '0';
     document.body.style.backgroundColor = '#ffffff';
-    html2pdf().set(opt).from(printElement).toPdf().get('pdf').then(function(pdf) {
+    html2pdf().set(opt).from(htmlString).toPdf().get('pdf').then(function(pdf) {
       const totalPages = pdf.internal.getNumberOfPages();
       for (let i = 1; i <= totalPages; i++) {
         pdf.setPage(i);
@@ -354,14 +354,14 @@ function executePDFExport(isLivePreview) {
       }
     }).save().then(() => {
       
-      if(document.body.contains(printElement)) document.body.removeChild(printElement);
+      
       document.body.style.padding = originalBodyPadding;
       document.body.style.backgroundColor = originalBodyBg;
       toast('PDF downloaded successfully!', 'success');
     }).catch(err => {
       console.error("PDF Error: ", err);
       if(document.body.contains(printElement)) 
-      if(document.body.contains(printElement)) document.body.removeChild(printElement);
+      
       document.body.style.padding = originalBodyPadding;
       document.body.style.backgroundColor = originalBodyBg;
       toast('Failed to generate PDF', 'error');
