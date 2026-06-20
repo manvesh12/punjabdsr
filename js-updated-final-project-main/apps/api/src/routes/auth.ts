@@ -7,6 +7,7 @@ import { recordAudit } from "../lib/audit.js";
 import { config } from "../lib/config.js";
 import { prisma } from "../lib/prisma.js";
 import { jsonSafe } from "../lib/json.js";
+import { sendEmail } from "../lib/email.js";
 
 const loginSchema = z.object({
   username: z.string().trim().min(3).max(254),
@@ -225,7 +226,18 @@ authRouter.post("/forgot-password", async (req, res) => {
     }
   });
 
-  // TODO: Dispatch Email/SMS in a real app
+  await sendEmail({
+    to: user.email,
+    subject: "DSR Portal - Password Reset OTP",
+    text: `Your OTP for password reset is ${otp}. It is valid for 10 minutes.\nIf you did not request this, please ignore this email.`,
+    html: `
+      <h3>Password Reset Request</h3>
+      <p>Your OTP for password reset is <strong>${otp}</strong>.</p>
+      <p>It is valid for 10 minutes.</p>
+      <p>If you did not request this, please ignore this email.</p>
+    `
+  });
+
   console.log(`[MOCK EMAIL/SMS] OTP for ${identifier} is ${otp}`);
   recordAudit(req, "PASSWORD_RESET_REQUESTED", { userId: user.id, identifier }, 200);
 

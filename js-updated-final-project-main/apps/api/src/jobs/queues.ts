@@ -15,8 +15,8 @@ export function redisConnection() {
 const defaultJobOptions = {
   attempts: 3,
   backoff: { type: "exponential", delay: 1000 },
-  removeOnComplete: 100,
-  removeOnFail: 1000 // Keep more failures for DLQ investigation
+  removeOnComplete: 10,  // Reduced from 100 for Render free tier (Redis memory)
+  removeOnFail: 50       // Reduced from 1000 for Render free tier (Redis memory)
 };
 
 export const pdfQueue = new Queue("pdf-jobs", { connection: redisConnection(), defaultJobOptions });

@@ -4,7 +4,7 @@ import { randomUUID } from "node:crypto";
 import { putPdf } from "../lib/storage.js";
 
 const allowedMimeTypes = new Set(["application/pdf"]);
-const maxPdfSizeBytes = 200 * 1024 * 1024;
+const maxPdfSizeBytes = 50 * 1024 * 1024; // Reduced to 50MB for free tier RAM limit
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: maxPdfSizeBytes } });
 
 export const filesRouter = Router();
