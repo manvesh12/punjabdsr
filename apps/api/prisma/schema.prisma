@@ -1,0 +1,235 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  STATE_ADMIN
+  DISTRICT_OWNER
+  OFFICER
+  REVIEWER
+  IIT_ROPAR
+  SDLC
+  SDO
+  JE
+  AXEN
+  GIS
+  REVIEWER_1
+  REVIEWER_2
+}
+
+enum ProjectStatus {
+  ACTIVE
+  IN_PROGRESS
+  COMPLETED
+  ARCHIVED
+}
+
+enum ReportStatus {
+  DRAFT
+  SUBMITTED
+  UNDER_REVIEW
+  APPROVED
+  REJECTED
+}
+
+enum ModelDsrStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum SectionContentType {
+  TEXT
+  TABLE
+  IMAGE
+  DYNAMIC_GRID
+}
+
+enum GeneratedDsrStatus {
+  DRAFT
+  FINAL
+}
+
+
+model User {
+  id          BigInt   @id @default(autoincrement())
+  fullName    String
+  username    String   @unique
+  email       String   @unique
+  mobileNumber String? @unique
+  password    String
+  role        Role
+  district    String?
+  blockName   String?
+  sectionName String?
+  accessScope String?
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  refreshTokens RefreshToken[]
+  passwordResetRequests PasswordResetRequest[]
+}
+
+model RefreshToken {
+  id        BigInt   @id @default(autoincrement())
+  token     String   @unique
+  userId    BigInt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  revoked   Boolean  @default(false)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+model Project {
+  id                BigInt        @id @default(autoincrement())
+  projectCode       String?       @unique
+  projectName       String
+  title             String?
+  district          String?
+  year              String?
+  mineral           String?
+  rivers            String?
+  description       String?
+  progress          Int           @default(0)
+  status            ProjectStatus @default(IN_PROGRESS)
+  signatures        Int           @default(0)
+  phaseNo           Int           @default(1)
+  parentPhaseId     BigInt?
+  phaseLocked       Boolean       @default(false)
+  phaseOrigin       String?       @db.Text
+  createdBy         BigInt?
+  projectState      String?       @db.Text
+  lastReviewedState String?       @db.Text
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  files             DsrFile[]
+  parentPhase       Project?      @relation("ProjectPhaseChain", fields: [parentPhaseId], references: [id])
+  childPhases       Project[]     @relation("ProjectPhaseChain")
+  generatedDsrs     GeneratedDsr[]
+
+  @@index([parentPhaseId])
+  @@index([district, phaseNo])
+}
+
+model Report {
+  id           BigInt       @id @default(autoincrement())
+  reportNumber String?      @unique
+  projectId    BigInt?
+  title        String
+  description  String?
+  reportType   String?
+  status       ReportStatus @default(DRAFT)
+  submittedBy  BigInt?
+  reviewedBy   BigInt?
+  approvedBy   BigInt?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+}
+
+model WorkflowHistory {
+  id          BigInt   @id @default(autoincrement())
+  reportId    BigInt
+  action      String
+  remarks     String?
+  performedBy BigInt?
+  performedAt DateTime @default(now())
+}
+
+model AuditLog {
+  id        BigInt   @id @default(autoincrement())
+  userId    BigInt?
+  action    String
+  method    String
+  path      String
+  ip        String?
+  userAgent String?
+  status    Int?
+  metadata  Json?
+  createdAt DateTime @default(now())
+}
+
+model DsrFile {
+  id          BigInt   @id @default(autoincrement())
+  projectId   BigInt
+  annexureId  String
+  fileName    String
+  objectKey   String
+  contentType String   @default("application/pdf")
+  sizeBytes   Int
+  createdAt   DateTime @default(now())
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, annexureId])
+}
+
+model ModelDsr {
+  id          String           @id @default(uuid())
+  title       String           @unique
+  description String?
+  status      ModelDsrStatus   @default(DRAFT)
+  createdBy   BigInt?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  version     Int              @default(1)
+  
+  sections    ModelDsrSection[]
+  generated   GeneratedDsr[]
+}
+
+model ModelDsrSection {
+  id            String             @id @default(uuid())
+  modelId       String
+  sectionName   String
+  sequence      Int
+  contentType   SectionContentType @default(TEXT)
+  configuration Json               @default("{}")
+
+  model         ModelDsr           @relation(fields: [modelId], references: [id], onDelete: Cascade)
+
+  @@unique([modelId, sequence])
+}
+
+model GeneratedDsr {
+  id          String              @id @default(uuid())
+  modelId     String
+  projectId   BigInt?
+  status      GeneratedDsrStatus  @default(DRAFT)
+  dataPayload Json                @default("{}")
+  pdfUrl      String?
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+
+  model       ModelDsr            @relation(fields: [modelId], references: [id], onDelete: Restrict)
+  project     Project?            @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  versions    GeneratedDsrVersion[]
+}
+
+model GeneratedDsrVersion {
+  id             String        @id @default(uuid())
+  generatedDsrId String
+  dataPayload    Json
+  pdfUrl         String?
+  createdAt      DateTime      @default(now())
+
+  generatedDsr   GeneratedDsr  @relation(fields: [generatedDsrId], references: [id], onDelete: Cascade)
+}
+
+model PasswordResetRequest {
+  id            BigInt   @id @default(autoincrement())
+  userId        BigInt
+  identifier    String   // Email or Mobile number
+  otpHash       String
+  expiresAt     DateTime
+  attemptCount  Int      @default(0)
+  used          Boolean  @default(false)
+  createdAt     DateTime @default(now())
+
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}

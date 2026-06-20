@@ -1,0 +1,24 @@
+# Smart DSR Modern Stack
+
+Organized final webstack.
+
+## Structure
+
+- `apps/web` - Next.js web app
+- `apps/web/public/legacy` - current working portal
+- `apps/api` - API backend
+- `packages` - shared packages
+- `scripts/windows` - Windows start/stop/helper scripts
+- `scripts/legacy-maintenance` - one-time legacy UI repair and branding scripts
+- `docs` - deployment and migration notes
+- `runtime/logs` - runtime logs
+- `tools` - local helper binaries
+
+## Run
+
+```powershell
+cd dsr-modern
+.\scripts\windows\START_HERE.bat
+```
+
+Use `scripts\windows\OPEN_DATABASE.bat` for Prisma Studio. Historical source diff material is kept in `docs\archive`.

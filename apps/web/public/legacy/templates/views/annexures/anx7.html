@@ -1,0 +1,46 @@
+<div id="view-anx7" class="view">
+  <div class="header-row">
+    <div>
+      <div class="page-title">Annexure VII - Transportation Routes</div>
+      <div class="page-sub">Transportation routes for individual leases and leases in clusters</div>
+    </div>
+
+  </div>
+  <div class="g2 annexure-line-layout" style="grid-template-columns: minmax(0, 2fr) minmax(220px, 0.75fr);">
+    <div class="annexure-line-main">
+      <div id="anx7-individual-routes-container">
+      </div>
+      <div style="margin-bottom:30px; margin-top:12px;">
+        <button class="btn btn-sm btn-pdf-upload" onclick="addRouteTableBlockAnx7()"
+          style="display:inline-flex; align-items:center; gap:6px;">
+          <i data-lucide="plus-circle" style="width:14px; height:14px;"></i>
+          <span>Add Another Table / Section</span>
+        </button>
+      </div>
+      <div id="anx7-cluster-routes-container">
+      </div>
+      <div style="margin-bottom:30px; margin-top:12px;">
+        <button class="btn btn-sm btn-pdf-upload" onclick="addClusterTableBlockAnx7()"
+          style="display:inline-flex; align-items:center; gap:6px;">
+          <i data-lucide="plus-circle" style="width:14px; height:14px;"></i>
+          <span>Add Another Table / Section</span>
+        </button>
+      </div>
+      <div class="final-actions" style="margin-top:32px; display:flex; justify-content:center;">
+        
+      </div>
+    </div>
+    <div class="annexure-line-instructions">
+      <div class="card">
+        <div class="card-hd">
+          <div class="card-title">Instructions</div>
+        </div>
+        <div class="card-bd">
+          <p style="color:var(--text-soft); font-size:14px; line-height:1.6; margin:0;">
+            Maintain individual route tables first, then cluster route tables. Use the right-side preview to verify the generated Annexure VII PDF before downloading.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

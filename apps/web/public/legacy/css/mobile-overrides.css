@@ -1,0 +1,107 @@
+/* =========================================================
+   GLOBAL MOBILE RESPONSIVENESS OVERRIDES
+   ========================================================= */
+
+@media (max-width: 1280px) {
+  html, body { max-width: 100vw !important; overflow-x: hidden !important; }
+  .app-workspace {
+    width: 100vw !important; max-width: 100vw !important; overflow-x: hidden !important;
+    box-sizing: border-box !important; padding-left: 0 !important; padding-right: 0 !important;
+    margin-left: 0 !important; margin-right: 0 !important;
+  }
+  .main-content, .view, .dash-portal-wrapper {
+    width: 100% !important; max-width: 100% !important; box-sizing: border-box !important;
+    padding: 12px !important; margin: 0 !important; overflow-x: hidden !important;
+  }
+  
+  /* SIDEBAR: Hide and off-canvas */
+  #sidebar {
+    position: fixed !important; top: 0 !important; left: -320px !important;
+    height: 100vh !important; width: 280px !important; z-index: 999999 !important;
+    transition: left 0.3s ease !important; box-shadow: 4px 0 20px rgba(0,0,0,0.4) !important;
+  }
+  body.mobile-sidebar-open #sidebar { left: 0 !important; }
+  body.mobile-sidebar-open::after {
+    content: '' !important; position: fixed !important; inset: 0 !important;
+    background: rgba(0,0,0,0.6) !important; z-index: 999998 !important;
+  }
+  
+  /* TOPBAR: Full width */
+  .topbar, .dash-global-topbar {
+      position: absolute !important; /* Make topbar movable */
+    left: 0 !important; width: 100vw !important; max-width: 100vw !important;
+    box-sizing: border-box !important; padding: 10px 15px !important;
+  }
+  .dash-gov-brand-row {
+    flex-wrap: nowrap !important; align-items: center !important; gap: 10px !important;
+    padding: 10px 16px !important;
+  }
+  .dash-brand-texts { flex: 1 !important; min-width: 0 !important; }
+  .dash-brand-title { font-size: 16px !important; white-space: normal !important; word-wrap: break-word !important; }
+  .dash-brand-subtitle, .dash-brand-bilingual { font-size: 11px !important; white-space: normal !important; }
+  
+  /* Mobile Hamburger Menu */
+  .mobile-menu-toggle {
+    display: inline-flex !important; align-items: center; justify-content: center;
+    background: transparent; border: 1px solid rgba(0,0,0,0.1); border-radius: 6px;
+    color: inherit; cursor: pointer; padding: 8px; flex-shrink: 0;
+  }
+  html.dark .mobile-menu-toggle { border-color: rgba(255,255,255,0.2); color: #fff; }
+  
+  /* GRIDS TO STACK */
+  .g2, .g3, .g4, .grid, .grid-container, .dash-bottom-layout-grid, .dash-projects-grid {
+    display: flex !important; flex-direction: column !important; width: 100% !important; gap: 16px !important;
+  }
+  
+  /* FLEX ROWS: Wrap */
+  .flex-row, .header-row, .dash-gov-utility-strip, .dash-menu-links {
+    flex-wrap: wrap !important;
+  }
+  .dash-menu-link-item button, .dash-menu-link-item .tb-sub-nav-btn {
+    padding: 8px 12px !important; font-size: 12px !important;
+  }
+  
+  /* TABLES: Scroll horizontally */
+  .table-responsive, .table-container, .table-wrapper {
+    display: block !important; width: 100% !important; max-width: 100vw !important;
+    overflow-x: auto !important; -webkit-overflow-scrolling: touch !important;
+  }
+  table { width: 100% !important; min-width: 600px !important; }
+  
+  /* CARDS / PANELS / MODALS */
+  .card, .panel, .modal-content, .pdf-preview-card, .pdf-preview-panel, .proj-card {
+    width: 100% !important; max-width: 100% !important; min-width: 0 !important;
+    box-sizing: border-box !important; margin-left: 0 !important; margin-right: 0 !important;
+  }
+  
+  /* INPUTS */
+  input, select, textarea { max-width: 100% !important; box-sizing: border-box !important; }
+  
+  /* FLOATING REVIEWER NOTES */
+  #reviewer-floating-notes:not(.is-minimized) {
+    width: calc(100vw - 32px) !important;
+    height: auto !important; max-height: calc(100vh - 40px) !important;
+    right: 16px !important; bottom: 16px !important;
+  }
+}
+
+/* Hide bulky topbar elements on mobile */
+@media (max-width: 900px) {
+  .dash-global-topbar .dash-switcher-bar,
+  .dash-global-topbar .dash-gov-utility-strip,
+  .dash-global-topbar .dash-menu-links,
+  .dash-global-topbar .dash-menu-search {
+    display: none !important;
+  }
+
+  .dash-global-topbar {
+    max-height: none !important;
+    height: auto !important;
+    padding-bottom: 10px !important;
+  }
+  
+  body:not(.view-dashboard-active) .app-workspace,
+  .app-workspace {
+    padding-top: 130px !important; /* Adjust padding since topbar is now much smaller */
+  }
+}

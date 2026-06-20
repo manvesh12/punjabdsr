@@ -1,0 +1,177 @@
+<div id="view-model-dsr" class="view">
+  <div class="header-row">
+    <div>
+      <div class="page-title">Model DSR</div>
+      <div class="page-sub">Upload, save, publish, and import Model DSR templates into district projects</div>
+    </div>
+    <button class="btn btn-outline btn-sm" onclick="fetchModelDsrs()">
+      <i data-lucide="refresh-cw" style="width:14px;height:14px;"></i>
+      Refresh
+    </button>
+  </div>
+
+  <div class="g2" style="align-items:start;">
+    <div class="card">
+      <div class="card-hd">
+        <div>
+          <div class="card-title">Create / Upload Template</div>
+          <div class="card-sub">Choose a district and attach a Model DSR file if available.</div>
+        </div>
+      </div>
+      <div class="card-bd">
+        <div class="field-group">
+          <div class="field">
+            <label>District</label>
+            <select id="model-dsr-district">
+              <option value="">Select district</option>
+              <option>Amritsar</option>
+              <option>Barnala</option>
+              <option>Bathinda</option>
+              <option>Faridkot</option>
+              <option>Fatehgarh Sahib</option>
+              <option>Fazilka</option>
+              <option>Ferozepur</option>
+              <option>Gurdaspur</option>
+              <option>Hoshiarpur</option>
+              <option>Jalandhar</option>
+              <option>Kapurthala</option>
+              <option>Ludhiana</option>
+              <option>Malerkotla</option>
+              <option>Mansa</option>
+              <option>Moga</option>
+              <option>Pathankot</option>
+              <option>Patiala</option>
+              <option>Rupnagar</option>
+              <option>Sahibzada Ajit Singh Nagar</option>
+              <option>Sangrur</option>
+              <option>Shaheed Bhagat Singh Nagar</option>
+              <option>Sri Muktsar Sahib</option>
+              <option>Tarn Taran</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Model DSR Name</label>
+            <input id="model-dsr-name" placeholder="Model DSR - Jalandhar">
+          </div>
+          <div class="field">
+            <label>Document</label>
+            <input id="model-dsr-file" type="file" accept=".pdf,.doc,.docx,.xlsx,.xls">
+          </div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button id="btn-model-dsr-upload" class="btn btn-saffron" type="button">Upload & Select Target Project</button>
+            <button id="btn-model-dsr-save-only" class="btn btn-outline" type="button">Save Locally</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-hd">
+        <div>
+          <div class="card-title">Rollback Import</div>
+          <div class="card-sub">Restore a project from the backup created before a Model DSR import.</div>
+        </div>
+      </div>
+      <div class="card-bd">
+        <div class="field-group">
+          <div class="field">
+            <label>Project ID</label>
+            <input id="mdsr-rollback-id" placeholder="Enter project ID">
+          </div>
+          <button id="btn-mdsr-rollback" class="btn btn-outline" type="button">Rollback Project</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:18px;">
+    <div class="card-hd">
+      <div>
+        <div class="card-title">Saved Model DSR Templates</div>
+        <div class="card-sub">Published templates can be imported into active district projects.</div>
+      </div>
+    </div>
+    <div class="card-bd">
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead>
+            <tr>
+              <th>Template</th>
+              <th>Status</th>
+              <th>Sections</th>
+              <th>Created By</th>
+              <th>Created</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td colspan="6" style="text-align:center; padding:20px;">Open this section to load Model DSRs.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-mdsr-target" class="modal-overlay">
+    <div class="modal-box" style="max-width:640px;">
+      <div class="modal-hd">
+        <h3>Select Target Project</h3><button class="modal-close" onclick="closeModal('modal-mdsr-target')">X</button>
+      </div>
+      <div class="modal-bd">
+        <p style="margin-bottom:12px;color:var(--text-mid);">District: <strong id="mdsr-target-district-label">-</strong></p>
+        <div id="mdsr-target-projects-list" class="field-group"></div>
+      </div>
+      <div class="modal-ft">
+        <button class="btn btn-outline" onclick="closeModal('modal-mdsr-target')">Cancel</button>
+        <button id="btn-mdsr-target-next" class="btn btn-saffron" type="button" disabled>Next</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-mdsr-preview" class="modal-overlay">
+    <div class="modal-box" style="max-width:620px;">
+      <div class="modal-hd">
+        <h3>Import Preview</h3><button class="modal-close" onclick="closeModal('modal-mdsr-preview')">X</button>
+      </div>
+      <div class="modal-bd">
+        <p style="margin-bottom:12px;color:var(--text-mid);">Target project: <strong id="mdsr-target-project-name">-</strong></p>
+        <div class="field-group">
+          <label style="display:flex;align-items:center;gap:8px;"><input id="mdsr-rule-chapters" type="checkbox" checked> Replace chapter mapping</label>
+          <label style="display:flex;align-items:center;gap:8px;"><input id="mdsr-rule-annexures" type="checkbox" checked> Replace annexure mapping</label>
+          <label style="display:flex;align-items:center;gap:8px;"><input id="mdsr-rule-attachments" type="checkbox" checked> Keep existing attachments</label>
+        </div>
+      </div>
+      <div class="modal-ft">
+        <button class="btn btn-outline" onclick="closeModal('modal-mdsr-preview')">Cancel</button>
+        <button id="btn-mdsr-confirm-import" class="btn btn-saffron" type="button">Confirm Import</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-mdsr-progress" class="modal-overlay">
+    <div class="modal-box" style="max-width:520px;">
+      <div class="modal-hd">
+        <h3>Model DSR Import</h3>
+      </div>
+      <div class="modal-bd">
+        <div id="mdsr-progress-title" style="font-weight:800;margin-bottom:12px;">Preparing import...</div>
+        <div class="progress-bar" style="height:12px;"><div id="mdsr-progress-bar" class="progress-fill" style="width:0%;"></div></div>
+        <div id="mdsr-progress-text" style="margin-top:10px;font-weight:700;color:var(--text-mid);">0%</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-mdsr-details" class="modal-overlay">
+    <div class="modal-box" style="max-width:720px;">
+      <div class="modal-hd">
+        <h3 id="mdsr-details-title">Model DSR</h3><button class="modal-close" onclick="closeModal('modal-mdsr-details')">X</button>
+      </div>
+      <div id="mdsr-details-body" class="modal-bd">
+        <div style="padding: 12px; color: var(--text-mid);">Loading template details...</div>
+      </div>
+      <div class="modal-ft">
+        <button class="btn btn-outline" onclick="closeModal('modal-mdsr-details')">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
