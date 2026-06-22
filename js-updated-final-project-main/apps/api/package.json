@@ -7,12 +7,14 @@
     "dev": "tsx watch src/server.ts",
     "dev:worker": "tsx watch src/worker.ts",
     "build": "prisma generate && tsc -p tsconfig.json",
-    "start": "npx prisma db push --accept-data-loss && npm run seed && node dist/src/server.js",
+    "start": "node dist/src/server.js",
     "start:worker": "node dist/src/worker.js",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma db push",
     "seed": "tsx prisma/seed.ts",
-    "test:security": "tsx scripts/security-load-test.ts"
+    "test:security": "tsx scripts/security-load-test.ts",
+    "vercel-build": "prisma generate",
+    "check": "npm run build"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.735.0",

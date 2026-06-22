@@ -16,6 +16,7 @@ import { projectsRouter } from "./routes/projects.js";
 import { reportsRouter } from "./routes/reports.js";
 import { usersRouter } from "./routes/users.js";
 import { modelDsrRouter } from "./routes/model-dsr.js";
+import crypto from "node:crypto";
 
 const app = express();
 app.set("trust proxy", 1);
@@ -42,7 +43,13 @@ import { prisma } from "./lib/prisma.js";
 import { redisConnection } from "./jobs/queues.js";
 
 morgan.token("userId", (req: any) => req.user?.id?.toString() || "guest");
-app.use(morgan(":method :url :status :res[content-length] - :response-time ms - user::userId - ip::remote-addr"));
+morgan.token("requestId", (req: any) => req.requestId || "-");
+app.use((req: express.Request & { requestId?: string }, res: express.Response, next: express.NextFunction) => {
+  req.requestId = req.header("x-request-id") || crypto.randomUUID();
+  res.setHeader("x-request-id", req.requestId);
+  next();
+});
+app.use(morgan(":requestId :method :url :status :res[content-length] - :response-time ms - user::userId - ip::remote-addr"));
 
 app.get("/health", (_req, res) => res.json({ ok: true }));
 
@@ -51,7 +58,8 @@ app.get("/live", (_req, res) => res.json({ status: "up" }));
 app.get("/ready", async (_req, res) => {
   try {
     await prisma.$queryRaw`SELECT 1`;
-    res.json({ status: "ready", db: "ok", redis: "ok" });
+    const connection = redisConnection();
+    res.json({ status: "ready", db: "ok", queue: `${connection.host}:${connection.port}` });
   } catch (e: any) {
     res.status(503).json({ status: "error", message: e.message });
   }
@@ -74,6 +82,11 @@ app.use((error: Error, _req: express.Request, res: express.Response, _next: expr
   res.status(500).json({ error: error.message || "Internal server error" });
 });
 
-app.listen(config.apiPort, () => {
-  console.log(`DSR API running on http://localhost:${config.apiPort}`);
-});
+// Export app for serverless platforms like Vercel
+export default app;
+
+if (!process.env.VERCEL) {
+  app.listen(config.apiPort, () => {
+    console.log(`DSR API running on http://localhost:${config.apiPort}`);
+  });
+}

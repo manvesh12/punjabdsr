@@ -5,7 +5,6 @@ const urlsToCache = [
   './css/premium-theme.css',
   './css/mobile-overrides.css',
   './js/portal.bundle.js',
-  './js/auth.js',
   './js/theme.js',
   './assets/smart-dsr-logo.png'
 ];

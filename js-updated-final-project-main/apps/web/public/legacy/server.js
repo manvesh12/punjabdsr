@@ -36,6 +36,9 @@ const USERS_FILE = path.join(__dirname, 'users.json');
 const UPLOADS_DIR = path.join(__dirname, 'uploads');
 const workflowHistory = {};
 
+let projectsCache = null;
+let usersCache = null;
+
 function cacheHeaderFor(ext) {
   if (ext === '.html' || ext === '.js' || ext === '.css') return 'no-cache';
   if (['.js', '.css', '.png', '.jpg', '.jpeg', '.gif', '.svg', '.ico'].includes(ext)) {
@@ -72,20 +75,28 @@ function getStatusForFrontend(status) {
 }
 
 function readProjects() {
+  if (projectsCache !== null) {
+    return projectsCache;
+  }
   try {
     if (fs.existsSync(PROJECTS_FILE)) {
       const parsed = JSON.parse(fs.readFileSync(PROJECTS_FILE, 'utf8'));
-      if (Array.isArray(parsed)) return parsed.map(normalizeProject);
+      if (Array.isArray(parsed)) {
+        projectsCache = parsed.map(normalizeProject);
+        return projectsCache;
+      }
     }
   } catch (err) {
     console.error('Error reading projects.json:', err);
   }
-  return [];
+  projectsCache = [];
+  return projectsCache;
 }
 
 function writeProjects(projects) {
   try {
-    fs.writeFileSync(PROJECTS_FILE, JSON.stringify(projects.map(normalizeProject), null, 2), 'utf8');
+    projectsCache = projects.map(normalizeProject);
+    fs.writeFileSync(PROJECTS_FILE, JSON.stringify(projectsCache, null, 2), 'utf8');
     return true;
   } catch (err) {
     console.error('Error writing projects.json:', err);
@@ -139,20 +150,28 @@ function defaultUsers() {
 }
 
 function readUsers() {
+  if (usersCache !== null) {
+    return usersCache;
+  }
   try {
     if (fs.existsSync(USERS_FILE)) {
       const parsed = JSON.parse(fs.readFileSync(USERS_FILE, 'utf8'));
-      if (Array.isArray(parsed)) return parsed.map(normalizeUser);
+      if (Array.isArray(parsed)) {
+        usersCache = parsed.map(normalizeUser);
+        return usersCache;
+      }
     }
   } catch (err) {
     console.error('Error reading users.json:', err);
   }
-  return defaultUsers();
+  usersCache = defaultUsers();
+  return usersCache;
 }
 
 function writeUsers(users) {
   try {
-    fs.writeFileSync(USERS_FILE, JSON.stringify(users.map(normalizeUser), null, 2), 'utf8');
+    usersCache = users.map(normalizeUser);
+    fs.writeFileSync(USERS_FILE, JSON.stringify(usersCache, null, 2), 'utf8');
     return true;
   } catch (err) {
     console.error('Error writing users.json:', err);
@@ -565,7 +584,10 @@ const server = http.createServer((req, res) => {
 
     if (pathname === '/api/projects') {
       if (req.method === 'GET') {
-        const projects = readProjects();
+        const projects = readProjects().map(p => {
+          const { projectState, lastReviewedState, ...rest } = p;
+          return rest;
+        });
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify(projects));
         return;
