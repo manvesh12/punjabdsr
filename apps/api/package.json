@@ -13,6 +13,7 @@
     "prisma:migrate": "prisma db push",
     "seed": "tsx prisma/seed.ts",
     "test:security": "tsx scripts/security-load-test.ts",
+    "vercel-build": "prisma generate",
     "check": "npm run build"
   },
   "dependencies": {

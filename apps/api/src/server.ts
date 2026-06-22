@@ -77,11 +77,16 @@ app.use("/api/users", requireAuth, auditMutations, usersRouter);
 app.use("/api/model-dsrs", requireAuth, auditMutations, modelDsrRouter);
 app.use("/api", requireAuth, uploadLimiter, auditMutations, pdfRouter);
 
-app.use((error: Error, req: express.Request, res: express.Response, _next: express.NextFunction) => {
+app.use((error: Error, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
   console.error(error);
-  res.status(500).json({ error: "Internal server error", requestId: (req as any).requestId });
+  res.status(500).json({ error: error.message || "Internal server error" });
 });
 
-app.listen(config.apiPort, () => {
-  console.log(`DSR API running on http://localhost:${config.apiPort}`);
-});
+// Export app for serverless platforms like Vercel
+export default app;
+
+if (!process.env.VERCEL) {
+  app.listen(config.apiPort, () => {
+    console.log(`DSR API running on http://localhost:${config.apiPort}`);
+  });
+}
